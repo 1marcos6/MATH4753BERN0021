@@ -1,0 +1,434 @@
+---
+title: "Ass1"
+author: "Marcos Bernier"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# *** *COMPLETED 15/15***
+
+
+## Question 1
+
+### Work
+ Assignments = 15% of grade,
+ Labs = 10% of grade,
+ Projects = 10% of grade,
+ Inclass Quizzes = 10% of grade,
+ Online Chapter Quizzes = 5% of grade,
+ Midterms = 20% of grade,
+ Final = 30% of grade,
+
+### Letter Grades
+ A = 100-90
+ B = 89-80
+ C = 79-70
+ D = 69-60
+ F = 59->
+
+## Question 2
+### a
+```{r}
+ddt <- read.csv("DDT.csv")
+coplot(LENGTH~WEIGHT | RIVER * SPECIES,data = ddt, pch = 1, col = 1:17)
+```
+
+### b
+They show the data LENGTH v WEIGHT of CCATFISH in the separate three rivers exlcuding TRM, by mile found.
+
+### c
+Line A makes a factor m that contains numerical data from MILE in DDT.CSV
+
+### d
+Gets a set of all unique values in m, and returns the number of unique values found (unqiue() constructs the set, length() gives the size of the set)
+
+### e
+
+LMBASS and SMBUFFALO aren't found in 3/4 rivers. Only in TRM.
+
+### f
+
+```{r}
+d <- subset(ddt, SPECIES == "CCATFISH" &  RIVER == "FCM")
+mean(d$DDT)
+```
+
+## Question 3
+
+### a. 
+quantitative
+
+### b. 
+quantitative
+
+### c. 
+qualitative
+
+### d. 
+quantitative
+
+### e. 
+qualitative
+
+### f. 
+quantitative
+
+### g. 
+qualitative
+
+## Question 4
+
+### a. 
+Simple (Random) Sampling, Stratified Sampling, Custer Sampling and Systematic Sampling
+
+### b. 
+  Simple random sampling uses a random number to determine the size of a sample.
+  Stratified uses similar characteristics to group samples
+  Cluster samples natural groupings of units, and samples the units within the smaller clusters, or natural groupings.
+  Systematic sampling uses an integer to pick the ith unit for involvement in the sample
+  
+## Question 5
+
+```{r}
+sec <- read.csv("MTBE.csv")
+
+sec[sample(1:223,5,replace = FALSE),]
+```
+
+### i) 
+```{r}
+sec2 = na.omit(sec)
+```
+
+### ii)
+```{r}
+depth = sec2[sec2$Aquifier=="Bedrock",]$Depth
+sd(depth)
+```
+
+
+## Question 6
+
+```{r}
+data <- read.csv("EARTHQUAKE.csv")
+data[sample(nrow(data),30),]
+```
+
+### i
+```{r}
+plot(ts(data$MAG))
+```
+  
+### ii
+```{r}
+median(data$MAGNITUDE)
+```
+
+
+
+## Question 7
+
+### a
+Designed experiment
+
+### b
+The total population of fish in the Tennesse river and its tributaries
+
+### c
+River and species
+
+
+## Question 8
+
+### a
+ Bar
+### b
+ None, Both, legs only, wheels only
+### c
+
+legs only
+
+### d
+
+```{r}
+library(MATH4753BERN0021)
+freq = c(15,8,63,20)
+RL = c("None","Both","LegsO","WheelsO")
+l=rep(RL,freq)
+```
+
+### e
+
+```{r}
+pareto(freq)
+```
+
+## Question 9
+
+### a
+
+```{r}
+dog <- pie(c(32,12,6),labels = c("Windows","Office","Explorer"),col=1:3)
+```
+
+Explorer had the lowest portion.
+
+### b
+
+```{r}
+issues = c("Denial of service","Information disclosure","Remote code execution", "Spoofing", "Privledge escalation")
+frequencys = c(6,8,22,3,11)
+pareto(rep(issues, frequencys))
+```
+
+Remote code execution is the most prominent issue
+
+
+## Question 10
+
+```{r}
+swd = read.csv("SWDEFECTS.csv", header = TRUE)
+head(swd)
+library(plotrix)
+tab = table(swd$defect)
+rtab = tab/sum(tab)
+round(rtab,2)
+pie3D(rtab, labels = list("OK", "DEFECTIVE"), main = "pie plot of SWD")
+```
+
+Most software releases are successful - without defects! The likihood of a defective software release is low.
+
+## Question 11
+
+### a
+```{r}
+voltage <- read.csv("VOLTAGE.csv")
+subvoltage = subset(voltage, LOCATION == "OLD")
+tablevoltage = table(cut(sort(voltage$VOLTAGE),breaks = seq(8.0,10.6,by=(2.6/9)),ord = TRUE))
+barplot(tablevoltage,space =0)
+```
+
+
+### b
+```{r}
+stem(tablevoltage)
+```
+
+
+### c
+
+```{r}
+newv <- subset(voltage, subset=LOCATION=="NEW")
+newv$VOLTAGE->vtn
+max(vtn)
+min(vtn)
+lept<-min(vtn)-0.05
+rept<-max(vtn)+0.05
+rnge<-rept-lept
+inc<-rnge/9
+seq(lept,rept,by=inc)->cl
+
+cvtn <- cut(vtn,breaks = cl)
+new.tab =table(cvtn)
+barplot(new.tab,space=0,main="Frequency Histogram(NEW)",las=2)
+   hist(vtn,nclass=10)
+```
+
+
+### d
+
+Old is better!
+
+### e
+
+```{r}
+#Old
+
+mode <- function(v)
+{
+  newNum <- unique(v)
+  newNum[which.max(tabulate(match(v,newNum)))]
+}
+
+mean((subset(voltage, LOCATION=="OLD"))$VOLTAGE)
+median((subset(voltage, LOCATION=="OLD"))$VOLTAGE)
+mode((subset(voltage, LOCATION=="OLD"))$VOLTAGE)
+```
+
+```{r}
+#NEw
+mean((subset(voltage, LOCATION=="NEW"))$VOLTAGE)
+median((subset(voltage, LOCATION=="NEW"))$VOLTAGE)
+mode((subset(voltage, LOCATION=="NEW"))$VOLTAGE)
+
+```
+
+OLD is better fit using the median. NEW is better fit using the mean! They are respectively closer to their modes.
+
+### f
+```{r}
+(10 - mean(subset(voltage, LOCATION=="OLD")$VOLTAGE))/(sd(subset(voltage, LOCATION=="OLD")$VOLTAGE))
+```
+
+
+### g
+```{r}
+(10 - mean(subset(voltage, LOCATION=="NEW")$VOLTAGE))/(sd(subset(voltage, LOCATION=="NEW")$VOLTAGE))
+```
+
+
+### h
+
+Old, the zscore is closer to 0 which means it derives less from the mean
+
+### i
+
+```{r}
+boxplot((subset(voltage, LOCATION=="NEW"))$VOLTAGE)
+```
+Some outliers :)
+
+### j
+
+```{r}
+old = subset(voltage, LOCATION=="OLD")
+
+(old$VOLTAGE-mean(old$VOLTAGE))/(sd(old$VOLTAGE))
+```
+
+1 outlier!
+
+### k
+
+```{r}
+news = subset(voltage, LOCATION=="NEW")
+boxplot(news$VOLTAGE)
+```
+
+
+### l
+```{r}
+(news$VOLTAGE-mean(news$VOLTAGE))/(sd(news$VOLTAGE))
+```
+
+No outliers? I think. No Z>3 or <-3
+
+### m
+
+```{r}
+boxplot(old$VOLTAGE,news$VOLTAGE,names = c("Old","New"), horizontal = FALSE)
+```
+
+
+## Question 12
+
+```{r}
+rough = read.csv("ROUGHPIPE.csv")
+
+mean = mean(rough$ROUGH)
+
+int1 = mean - (2*sd(rough$ROUGH))
+int2 = mean + (2*sd(rough$ROUGH))
+int1
+int2
+
+```
+
+## Question 13
+
+### a
+
+```{r}
+gobiants <- read.csv("GOBIANTS.csv")
+
+mean(gobiants$AntSpecies)
+median(gobiants$AntSpecies)
+
+#mode(gobiants$AntSpecies)
+```
+
+There is no mode function for R. Looking at the data, the mode is 4 or 5. They appear = times.
+
+### b
+
+We should use the median. Data is skewed in this dataset.
+
+### c
+
+```{r}
+mean(gobiants$PlantCov[gobiants$Region=="Dry Steppe"])
+median(gobiants$PlantCov[gobiants$Region=="Dry Steppe"])
+```
+
+Mode is 40
+
+### d
+
+```{r}
+mean(gobiants$PlantCov[gobiants$Region== "Gobi Desert"])
+
+median(gobiants$PlantCov[gobiants$Region== "Gobi Desert"])
+```
+
+Mode is 30
+
+### e
+
+Yes
+
+## Question 14
+
+### a
+
+```{r}
+deez <- read.csv("GALAXY2.csv")
+
+hist(deez$VELOCITY)
+```
+
+### b
+
+The data seemingly has two natural clusters that split down the middle of the histogram. So yes! The double cluster theory seems to valid. @ 21000
+
+### c
+
+```{r}
+sd(deez[deez$VELOCITY < 21000,])
+mean(deez[deez$VELOCITY < 21000,])
+
+```
+ 
+A1775A
+
+```{r}
+sd(deez[deez$VELOCITY > 21000,])
+mean(deez[deez$VELOCITY > 21000,])
+```
+
+A1775B
+
+
+### d
+
+20k falls within 2 standard deviations of the mean of A1775A, so it most likely belongs to A1775A cluster.
+
+
+## Question 15
+
+```{r}
+library(ggplot2)
+rivers <- read.csv("DDT.csv")
+p = ggplot(rivers, aes(x=RIVER, y = LENGTH, fill = SPECIES))
+p = p + geom_boxplot()
+p = p+ggtitle(label = "Marcos Bernier")
+p
+```
+
+

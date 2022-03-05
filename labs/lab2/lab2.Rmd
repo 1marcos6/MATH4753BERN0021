@@ -1,0 +1,84 @@
+---
+title: "Lab2"
+author: "Marcos Bernier"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tasks
+
+## Task1
+```{r}
+getwd()
+```
+
+## Task2
+```{r}
+rford <- read.csv("EPAGAS-1.csv")
+head(rford)
+```
+
+## Task 3
+```{r}
+ford <- read.csv("DDT.CSV")
+mpg <- ford$WEIGHT
+z = (mpg - mean(mpg))/sd(mpg)
+possible <- mpg[abs(z) > 2 & abs(z) <= 3]
+possible
+
+
+
+```
+
+
+## Task 4
+```{r}
+s <- boxplot(mpg, notch = TRUE, horizontal = TRUE, col = "BLACK", main = "Boxplot for MPG")
+```
+
+Chebyshev’s Theorem says 1-1/2^2, or 75% if the data will fall between. The actual answer is:
+```{r}
+length(mpg[abs(z)<2])/length(mpg)
+```
+
+which falls above the "at least" mark set by the theorem, so the theorem agrees with the actual answer.
+
+The empirical rule says that around 95% of the data should fall between 2 standard deviations of the mean. The real answer is
+```{r}
+length(mpg[abs(z)<2])/length(mpg)
+```
+There is a one point difference between the actual calculated value and the empirical rule's predicted value. 
+```{r}
+ss <- density(mpg)
+plot(ss)
+```
+
+Because the data is roughly bell-shaped, we can apply the empircal rule in this case.
+
+
+
+```{r}
+curve( 15*x^2, from=2, to=20, n=300, xlab="nvalue", ylab="T(n)value", 
+             col="blue", lwd=2, main="Plot of 15n^2"  )
+curve( 8*x^3, from=2, to=20, n=300, xlab="nvalue", ylab="T(n)value", 
+             col="blue", lwd=2, main="Plot of 8n^3"  )
+curve( 2^x, from=2, to=20, n=300, xlab="nvalue", ylab="T(n)value", 
+             col="blue", lwd=2, main="Plot of 2^n"  )
+curve( 3^x, from=2, to=20, n=300, xlab="nvalue", ylab="T(n)value", 
+             col="blue", lwd=2, main="Plot of 3^n"  )
+curve( factorial(x), from=2, to=20, n=300, xlab="nvalue", ylab="T(n)value", 
+             col="blue", lwd=2, main="Plot of n!"  )
+curve( x*log(x), from=2, to=20, n=300, xlab="nvalue", ylab="T(n)value", 
+             col="blue", lwd=2, main="Plot of nlog(n)"  )
+```
+
+
+
