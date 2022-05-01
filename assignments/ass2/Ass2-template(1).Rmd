@@ -1,0 +1,220 @@
+---
+title: 'Ass 2: Template'
+author: "Marcos Bernier"
+date: '`r format(Sys.Date(),format="%A, %B %d, %Y")`'
+output: 
+  html_document:
+    df_print: paged
+    fig_caption: true
+    highlights: pygments
+    number_sections: no
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+---
+
+COMPLETED 16/17
+
+```{r setup, include=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questions{}
+
+## Q 1
+
+a. Because the probability of a correct match is 92.12. The probabolity of not identifying correctly is 7.88%.
+
+b. The probabolity of a correct match is 74.55. So the probabolity of the opposite is 25.45%.
+
+c. The participant is more likely to be a novice.
+
+## Q 2
+
+
+a. The probability is 50%. $(50/1000) / (100/1000)$
+
+b. 99% $(891/1000)/(900/1000)$
+
+c. $(.1*.5)/((.1*.5)+((.9*.01)))$
+
+
+## Q 3
+
+Total possible outcomes between two sets is the length of the sets multipled by eachother.
+
+Set X is length 3.
+Set Y is length 5.
+
+Total Possible outcomes = $ |X| * |Y| = 3 * 5 = 15$
+## Q 4
+
+Let X equal a set of length 4. We want permutation of 3 from the set.
+
+The amount of perm =
+
+$4!/{4-3} = 24/1 = 24 $
+
+
+## Q 5
+X is a set of N elements to be separated into y sets.
+$ N!/{n_1! .. n_y!}$
+
+## Q 6
+
+n items are picked - x items are not. x is N-n for N being the size of the pool.
+
+$N!/{n!*{N-n}!}$
+
+
+## Q 7
+
+a. .3+.37+.09+.2+.04
+
+b. .2 +.04 = .24 ?
+
+c. .09 + .3 = .39
+
+## Q 8
+
+a. 0<=p(y) <=1 is met. all p(y) fit. The sum of all p's = 1. 
+
+b. $.02 + .02 + .02 + .01 +.01+.01+.01+.01+.005+.005$
+
+c. 
+```{r}
+variance <- round(sum((seq(0,20) - sum(seq(0,20)*c(.17,.10,.11,.11,.10,.10,.07,.05,.03,.02,.02,.02,.02,.02,.01,.01,.01,.01,.01,.005,.005)))^2 * c(.17,.10,.11,.11,.10,.10,.07,.05,.03,.02,.02,.02,.02,.02,.01,.01,.01,.01,.01,.005,.005)),4)
+
+variance
+```
+
+d.
+
+
+```{r}
+sqrt(variance)
+
+sum(seq(0,20)*c(.17,.10,.11,.11,.10,.10,.07,.05,.03,.02,.02,.02,.02,.02,.01,.01,.01,.01,.01,.005,.005)) -2*sqrt(variance)
+
+sum(seq(0,20)*c(.17,.10,.11,.11,.10,.10,.07,.05,.03,.02,.02,.02,.02,.02,.01,.01,.01,.01,.01,.005,.005)) +2*sqrt(variance)
+```
+
+## Q 9
+
+a. $dbinom(10, 25, .7)$ = .0013
+
+b. $pbinom(5,25,.7)$ = .000000345744
+
+c. $25(.7) = 17.5 = mu$
+    $25(.7)(.3) = 5.25 = sigma^2$
+    $sigma = sqrt(sigma^2) = 2.2913$
+    
+d. The out of 25 students, 17.5 on average will have earned a PHD. The std is 2.2913.
+ 
+## Q 10
+
+a. N = 50 and prob = .1
+
+$50!/((5!)^{10}) * .1^{50} = 0.0000005$
+
+b. $.0338 = p(y=0) + p(y = 1)$
+
+## Q 11
+
+a. $p(y) = p*q^{y-1}$
+
+b. $1/{.4} = 2.5 = 1/p$
+
+c. $ p(y) = .4/.6^{0} = 0.4$
+
+d. $ p(y=2) $
+
+## Q 12
+
+a. $ {nr}/N = 80/209 = .3828 $
+
+b. $ {\binom{8}{4}*\binom{201}{6} }/ \binom{209}{10}$ = 0.00017
+
+## Q 13
+
+a. $sigma^{2} = .03$
+
+b. The events need to occur in a specific unit of time,
+
+c. $ y= {.03^{0} * e^{-.03}}/{0!} = .9704$
+
+## Q 14
+
+a. $2c -yc$ $\int_0^1 f(y)dy=1$
+$ c = 2/3$
+
+b.  The CDF is .1 Because it is the integral of y aka
+$ \int_{-\infty}^{yf(x)dx} $
+
+c. $2/3 * (2*(.4)) - .4^{2}/{2}$ = .48
+
+d. $2/3 * (2(.6) - .6^{2}/2) - 2/3 (2(.1) - .1^2/2) $ = 0.55
+
+## Q 15
+
+a.
+
+b.
+
+c.
+
+
+## Q 16
+
+a.
+```{r}
+1-pnorm(-1.5625,0,1)
+```
+  
+
+b.
+
+```{r}
+pnorm(1.5625,0,1)
+```
+
+
+c.
+
+```{r}
+pnorm((2)/3.2,mean=0,sd=1) - pnorm(1/3.2,0,1)
+```
+
+## Q 17
+
+a. 
+
+```{r}
+pnorm(700,605,185)-pnorm(500,605,185)
+```
+
+b.
+
+```{r}
+pnorm(500,605,185)-pnorm(400,605,185)
+
+```
+
+c.
+
+```{r}
+pnorm(850,605,185)
+```
+
+
+d.
+
+```{r}
+1-pnorm(1000,605,185)
+```
+
+e. 
+
+```{r}
+185*(605 + qnorm(.9,0,1))
+```

@@ -1,3 +1,13 @@
+#' Title
+#'
+#' @param x is the dataset vector
+#' @param mn is the name of the barplot
+#' @param ...
+#'
+#' @return Returns a pareto barplot
+#' @export
+#'
+#' @examples
 pareto<-function(x,mn="Pareto barplot",...){  # x is a vector
 x.tab=table(x)
 xx.tab=sort(x.tab, decreasing=TRUE,index.return=FALSE)
@@ -12,3 +22,5 @@ segments(bp[i],cs[i],bp[i+1],cs[i+1],col=i,lwd=2)
 title(main=mn,...)
 
 }
+
+pareto(c(1,2,3,4,4))

@@ -1,0 +1,327 @@
+---
+title: "MATH 4753 Project 2"
+author: "Marcos Bernier"
+date:  "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: show
+    csl: biomed-central.csl
+    df_print: paged
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    number_sections: yes
+    theme: journal
+    toc: yes
+    toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: 4
+  pdf_document:
+    df_print: kable
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    highlight: tango
+    toc: yes
+    toc_depth: 4
+bibliography: project.bib
+abstract: This project is all about applications of SLR to real data using R. The specific data I will be analyzing was measured regarding the effect that changes in the temperature of ocean water has on the weight of matured (specific) species of fish. Hopefully I will be able to discover some sort of linear relationship between the rising ocean temperatures caused by the proximity of nuclear power industry, and the rising or lowering of fish weights. Using fish weight as a metric to benchmark fish development is the idea here.
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(dplyr)
+```
+
+```{r}
+
+```
+
+
+![](dreamstime_m_4494187.jpg)
+
+# Introduction
+
+This data contained by the file "OCEANTEMP.CSV" was collected by the Environmental Protection Agency in order to determine the potential impact a coastal nuclear power plant would have on marine life in the area. The EPA created several identical simulated ocean environments for a specific species of fish. The only variable in these environments were the temperatures of the enclosures.
+
+The data was collected here:
+
+```{r map, echo=FALSE, fig.align='center'}
+leaflet() %>%
+  setView(lat=38.892140, lng=-77.028220, zoom= 16) %>% 
+  addTiles() %>%
+  addMarkers(lat=38.892140, lng=-77.028220, popup="EPA HEADQUARTERS") 
+```
+
+
+
+## What are the variables?
+
+```{r datacars}
+mydata <- read.csv("OCEANTEMP.csv")
+```
+
+### Temp
+
+This variable represents the temperatures of ocean environments, measured in Fahrenheit.
+
+There are 5 temperatures recorded by the EPA, as they set up 5 unique environments for fish to mature in. The values below the displayed temperatures are how many fish were recorded at each temperature.
+
+```{r}
+table(mydata$TEMP)
+```
+
+
+### Weight
+
+This variable represents the weights of fish measured by the EPA. I believe the EPA has measured these weights in grams. The species of the fish is not specified, but the experiment conductors did specify that only one fish species was observed. In total, the EPA kept track of the weights of 22 fish.
+
+```{r}
+addmargins(table(mydata$WEIGHT))
+```
+
+
+### Weight vs Temp
+
+All data points of the EPA experiment are demonstrated by a point on the graph below.
+
+```{r}
+mydata
+library(ggplot2)
+
+ggplot(mydata, aes(x=TEMP, y=WEIGHT)) + geom_point()
+
+```
+
+
+
+## How were the data collected? 
+
+The data was collected by the Environmental Protection Agency, a federal department that operates under the executive branch of the United States government. The Environmental Protection Agency, or EPA for short, created 5 simulated ocean environments suitable for a specific species of fish, and differentiated the water temperatures between these 5 environments.
+
+
+## What is the story behind the data?
+
+The data was collected to see the effect a coastal nuclear power plant would have on fish in the local waters. Nuclear power plants use water to cool off heating rods of radiation, and this water is usually exited through a local source. On the coast, the source would be the ocean.
+
+## Why was it gathered? 
+
+The data was gathered in order to demonstrate the correlation or non-correlation between rising ocean temperatures and the maturing of fish species. Using weight as a benchmark for fish growth allows the EPA to look at a specific species of fish and decide whether its growth was affected by the temperature of the water it lives in.
+
+## What is your interest in the data?
+
+My interest in this data coincides with my interest in preservation of marine life species. I think that industrial activity should be limited in areas that it could serve to detriment species that are vulnerable.
+![some fishes](GettyImages-518372184-e1584128607450-scaled.jpg)
+![pwoer plant near ocean](header-coastal-nuclear-plants.jpg)
+
+## What problem do you wish to solve?
+
+The problem I wish to solve is to see if there is some relationship between the construction and operation of a power plant near a coast, and the health and maturity of fish populations that live in close proximity to these coastal plants. It is known that these plants cause temperature increases in the water around them, it is not exactly known whether this can affect the fish.
+
+# Theory needed to carry out SLR
+
+To prove that the data has a linear relationship denoted by
+
+$y_i = \beta_0 + \beta_1x_i + \epsilon_I$
+
+There are 3 major assumptions that must be checked.
+
+
+## Check for Linearity between two variables
+
+The data must demonstrate that the relationship between values of TEMP and WEIGHT are approximately linear. We can use trendlines on this data to identify a linear relationship.
+
+## Check for the normality of errors
+
+Residuals should have a normal distribution. We worked on this in some of the labs with the Shapiro-Wilk distribution, where if most points fit on the line, it can be identified as normal.
+
+
+## Check for the mean of zero, and constant variances
+
+The variances of residuals should remain constant.
+
+# Validity with mathematical expressions
+
+## Checks on validity
+
+### Straight trend line  
+
+#### Use trendscatter
+
+```{r}
+library(s20x)
+trendscatter(mydata$TEMP,mydata$WEIGHT,xlab = "Temperature", ylab= "Weight")
+```
+
+The scatter indicates there is a decent negative trend, whereas when temperature increases, weight decreases.
+
+
+### Errors distributed Normally
+
+$$\epsilon_i \sim N(0,\sigma^2)$$
+To test the distribution above, we will use the Shapiro Wilk test.The output p value must be higher than .05 if we want to prove with 95% confidence that the errors are distributed normally.
+
+#### Shapiro-wilk
+
+```{r}
+normcheck(lm(mydata$WEIGHT~mydata$TEMP),shapiro.wilk = TRUE)
+```
+
+As the P value is > .05 the null hypothesis can be accepted. The errors are distributed normally for this data set.
+
+### Constant variance
+
+#### Residual vs fitted values
+
+```{r}
+plot(residuals(lm(mydata$WEIGHT~mydata$TEMP)),fitted(lm(mydata$WEIGHT~mydata$TEMP)))
+```
+
+
+#### trendscatter on Residual Vs Fitted
+
+```{r}
+trendscatter(residuals(lm(mydata$WEIGHT~mydata$TEMP)),fitted(lm(mydata$WEIGHT~mydata$TEMP)))
+```
+
+```{r}
+plot(lm(mydata$WEIGHT~mydata$TEMP),which =1)
+```
+
+They are (by eyeball estimate) quite evenly distributed over and below the red line. The errors have a constant variance. 
+
+
+### Zero mean value of $\epsilon$
+
+```{r}
+t.test(residuals(lm(mydata$WEIGHT~mydata$TEMP),NULL=0))
+```
+
+T.test shows the null hypothesis (the mean of errors is 0) should be accepted.
+
+
+### Independence of data 
+
+Through the story, the data is independent. Each weight variable refers to a specific fishes weight in a specific environment that has a maintained specific temperature.
+
+
+# Model selection if you compared models 
+
+## Use adjusted $R^2$ 
+$$R_{adj}^2 =$$
+```{r}
+plot(lm(mydata$WEIGHT~mydata$TEMP))
+```
+```{r}
+summary(lm(mydata$WEIGHT~mydata$TEMP))
+```
+
+
+
+# Analysis of the data
+
+## Add the trend to the data
+
+```{r}
+library(ggplot2)
+
+g = ggplot(mydata, aes(x=TEMP, y=WEIGHT, color = TEMP)) + geom_point() + geom_smooth(method="lm")
+g
+```
+
+
+
+## Summary lm object
+
+```{r}
+summary(lm(mydata$WEIGHT~mydata$TEMP))
+```
+
+The null hypothesis should be rejected because the P values are too small.
+
+$\beta_0 = 53.23708$
+$\beta_1 = -.78431$
+
+
+### Interpretation of all tests
+
+$y_i = \beta_0 + \beta_1x_i + \epsilon_I$
+
+The Shapiro Wilk test proved normality, while a decent constant variance test was proved by plotting the resiudals vs the fitted values. The error mean zero was proved with the T test. So we can eliminate the error variable and we are left with
+
+$y_i = \beta_0 + \beta_1x_i + \epsilon_I$
+
+which can be replaced with
+
+$- 0.78431x_i + 53.23708= \hat y$
+
+### Interpretation of multiple R squared
+
+The multiple R-squared value that the summary produced was 0.8644. This implies that the linear model can explain 86.44% of variance in the values of WEIGHT.
+
+
+### Interpretation of all point estimates
+
+$\beta_0 = 53.23708$
+$\beta_1 = -.78431$
+
+Restated from above; these values amount to the y-intercept and the slope of the function respectively.
+
+
+## Calculate cis for $\beta$ parameter estimates
+
+$\beta CI = \beta +_- t*(sd)$
+
+This is to say that the confidence interval of both estimates will be the actual estimate + or - the given t value multipled by the standard deviation given.
+
+FOr $B0 = [53.23708-(17.33*3.071),53.23708+(17.33*3.071)]$
+$B1 = [-.78431-(-11.29*0.06947),-.78431+(-11.29*0.06947)]$
+
+### Use of `predict()`
+
+```{r}
+linmod = lm(mydata$WEIGHT~mydata$TEMP)
+predict(linmod, data.frame(TEMP = c(100,200,300)))
+```
+
+### Use of `ciReg()`
+
+```{r}
+ciReg(linmod)
+```
+
+### Check on outliers using cooks plots
+
+```{r}
+n = length(mydata$TEMP)
+cooks = cooks.distance(linmod)
+custom = ifelse(cooks>4/n, "Red","Black")
+plot(cooks, col = custom)
+```
+
+The general rule of thumb with Cooks distances is any data point with a distance over 4/n is an outlier. According to this schema, there is one outlier in this data set!
+
+
+
+# Conclusion
+
+The data demonstrates to a degree that there is some sort of negative relationship between rising ocean waters and the weight/development cycle of a specific fish species. There is much more research that needs to be conducted in this specific field before concrete conclusions can be made, due to the constraints of the original experiment.
+
+## Answer your research question
+
+Although many plots suggest that this set of data has a negative linear relationship, I am not fully convinced that the data can completely demonstrate the causation between rising ocean temperatures and lowering fish weights. The data set does not include enough information to make the broad conclusion of causation, and even if it did, this conclusion would only apply to one species of fish.
+
+## Suggest ways to improve model or experiment
+
+The reason why I cannot be sure of the causation is also my number 1 suggestion for improvement of the model and the experiment - this data set needs a much much much larger population to actually have conclusive data. The EPA should consider re-creating this experiment on a larger scale to verify their findings of this initial, smaller set of measurements. The EPA should also consider keeping track of a multitude of species of fish, as this will help in demonstrating if specific species are affected while others are not, if some are affected more..etc. This research question remains important not only for the development of nuclear power plants, but also for rising sea levels and surface temperatures in the wake of climate change. I think the EPA could gain a lot from conducting similar research again.
+
+# References
+
+Ocean warming. IUCN. (2018, December 5). Retrieved April 30, 2022, from https://www.iucn.org/resources/issues-briefs/ocean-warming 
+
+Lydersen, K. (2016, September 9). Amid climate concerns, nuclear plants feel the heat of Warming water. Energy News Network. Retrieved April 30, 2022, from https://energynews.us/2016/09/09/nuclear-plants-feel-the-heat-of-warming-water/ 
+
+Welch, C. (2021, May 3). Climate change may shrink the world's fish. Science. Retrieved April 30, 2022, from https://www.nationalgeographic.com/science/article/climate-change-study-ocean-fish-size 

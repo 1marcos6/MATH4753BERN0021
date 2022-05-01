@@ -1,0 +1,249 @@
+---
+title: "lab9"
+author: "Marcos Bernier"
+date: "4/1/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Task 1
+
+```{r}
+getwd()
+```
+
+## Task 2
+
+A takes a sample (size = iter*n) with replacement from x and stores it into y
+
+B makes a confidence interval
+
+Equal probability sampling is necessary because it helps get a normal dist.
+
+
+```{r}
+set.seed(35)
+sam=round(rnorm(20,mean=10,sd=4),2)
+unique(sample(sam,20,replace=TRUE) )
+unique(sample(sam,20,replace=TRUE) )
+unique(sample(sam,20,replace=TRUE) )
+unique(sample(sam,20,replace=TRUE) )
+unique(sample(sam,20,replace=TRUE) )
+```
+
+There is less than 20 values even though the size of sam is 20. Because we replace values when drawn
+
+```{r}
+unique(sample(sam,20, replace = FALSE))
+unique(sample(sam,20, replace = FALSE))
+unique(sample(sam,20, replace = FALSE))
+unique(sample(sam,20, replace = FALSE))
+unique(sample(sam,20, replace = FALSE))
+```
+
+There are 20 unique values.
+
+```{r}
+#unique(sample(sam,21, replace = FALSE))
+```
+error because 21>20
+
+
+## Task 3
+
+```{r}
+myboot<-function(iter=10000,x,fun="mean",alpha=0.05,...){  
+
+#Notice where the ... is repeated in the code
+n=length(x)   #sample size
+
+#Now sample with replacement
+y=sample(x,n*iter,replace=TRUE) #A
+
+# Make a matrix with all the resampled values
+rs.mat=matrix(y,nr=n,nc=iter,byrow=TRUE)
+xstat=apply(rs.mat,2,fun) 
+# xstat is a vector and will have iter values in it 
+ci=quantile(xstat,c(alpha/2,1-alpha/2)) #B
+# Nice way to form a confidence interval
+# A histogram follows
+# The object para will contain the parameters used to make the histogram
+para=hist(xstat,freq=FALSE,las=1,main="Histogram of Bootstrap sample statistics",...)
+
+#mat will be a matrix that contains the data, this is done so that I can use apply()
+mat=matrix(x,nr=length(x),nc=1,byrow=TRUE)
+
+#pte is the point estimate
+#This uses whatever fun is
+pte=apply(mat,2,fun)
+abline(v=pte,lwd=3,col="Black")# Vertical line
+segments(ci[1],0,ci[2],0,lwd=4)      #Make the segment for the ci
+text(ci[1],0,paste("(",round(ci[1],2),sep=""),col="Red",cex=3)
+text(ci[2],0,paste(round(ci[2],2),")",sep=""),col="Red",cex=3)
+
+# plot the point estimate 1/2 way up the density
+text(pte,max(para$density)/2,round(pte,2),cex=3)
+
+return(list(ci=ci,fun=fun,x=x))# Some output to use if necessary
+}
+
+```
+
+```{r}
+set.seed(39)
+sam = rnorm(25,mean=25,sd=10)
+mean(sam)
+catch <- myboot(sam,iter = 10000, alpha = .05)
+set.seed(30)
+sam = rchisq(20,df=3)
+mean(sam)
+catch <- myboot(sam,iter = 10000, alpha = .05)
+set.seed(40)
+sam = rgamma(30,shape=2, scale=3)
+mean(sam)
+catch <- myboot(sam,iter = 10000, alpha = .05)
+set.seed(10)
+sam = rbeta(20, shape1=3, shape2=4)
+mean(sam)
+catch <- myboot(sam,iter = 10000, alpha = .05)
+
+
+```
+
+```{r}
+set.seed(39)
+sam = rnorm(25,mean=25,sd=10)
+mean(sam)
+catch <- myboot(sam,iter = 10000, alpha = .2)
+set.seed(30)
+sam = rchisq(20,df=3)
+mean(sam)
+catch <- myboot(sam,iter = 10000, alpha = .2)
+set.seed(40)
+sam = rgamma(30,shape=2, scale=3)
+mean(sam)
+
+catch <- myboot(sam,iter = 10000, alpha = .2)
+set.seed(10)
+sam = rbeta(20, shape1=3, shape2=4)
+mean(sam)
+catch <- myboot(sam,iter = 10000, alpha = .2)
+```
+
+## Task 4
+
+
+```{r}
+myboot<-function(iter=10000,x,fun="mean",alpha=0.05,...){  
+
+#Notice where the ... is repeated in the code
+n=length(x)   #sample size
+
+#Now sample with replacement
+y=sample(x,n*iter,replace=TRUE) #A
+
+# Make a matrix with all the resampled values
+rs.mat=matrix(y,nr=n,nc=iter,byrow=TRUE)
+xstat=apply(rs.mat,2,fun) 
+# xstat is a vector and will have iter values in it 
+ci=quantile(xstat,c(alpha/2,1-alpha/2)) #B
+# Nice way to form a confidence interval
+# A histogram follows
+# The object para will contain the parameters used to make the histogram
+para=hist(xstat,freq=FALSE,las=1,main="Histogram of Bootstrap sample statistics",...)
+
+#mat will be a matrix that contains the data, this is done so that I can use apply()
+mat=matrix(x,nr=length(x),nc=1,byrow=TRUE)
+
+#pte is the point estimate
+#This uses whatever fun is
+pte=apply(mat,2,fun)
+abline(v=pte,lwd=3,col="Black")# Vertical line
+segments(ci[1],0,ci[2],0,lwd=4)      #Make the segment for the ci
+text(ci[1],0,paste("(",round(ci[1],2),sep=""),col="Red",cex=3)
+text(ci[2],0,paste(round(ci[2],2),")",sep=""),col="Red",cex=3)
+
+# plot the point estimate 1/2 way up the density
+text(pte,max(para$density)/2,round(pte,2),cex=3)
+
+return(list(ci=ci,fun=fun,x=x,xstat=xstat))# Some output to use if necessary
+}
+```
+
+```{r}
+sam = c(1,1,1,2,2,2,2,3,3,3,4,4)
+booter <- myboot(x=sam,fun="median")
+```
+
+```{r}
+barplot(table(booter$xstat))
+```
+
+## Task 5
+
+```{r}
+set.seed(39)
+sam = rnorm(25, mean=25, sd=10)
+norms = myboot(x=sam, fun=function(x) {mean(x) / median(x)}, alpha = 0.05)
+set.seed(30)
+sam = rchisq(20,df=3)
+chisqs = myboot(x=sam, fun=function(x) {mean(x) / median(x)}, alpha = 0.05)
+set.seed(40)
+sam = rgamma(30,shape=2, scale=3)
+gammas = myboot(x=sam, fun=function(x) {mean(x) / median(x)}, alpha = 0.05)
+set.seed(10)
+sam= rbeta(20, shape1=3, shape2=4)
+rbetas = myboot(x=sam, fun=function(x) {mean(x) / median(x)}, alpha = 0.05)
+
+
+set.seed(39)
+sam = rnorm(25, mean=25, sd=10)
+norms = myboot(x=sam, fun=function(x) {mean(x) / median(x)}, alpha = 0.3)
+set.seed(30)
+sam = rchisq(20,df=3)
+chisqs = myboot(x=sam, fun=function(x) {mean(x) / median(x)}, alpha = 0.3)
+set.seed(40)
+sam = rgamma(30,shape=2, scale=3)
+gammas = myboot(x=sam, fun=function(x) {mean(x) / median(x)}, alpha = 0.3)
+set.seed(10)
+sam= rbeta(20, shape1=3, shape2=4)
+rbetas = myboot(x=sam, fun=function(x) {mean(x) / median(x)}, alpha = 0.3)
+
+```
+
+
+## Task 6
+
+```{r}
+?distributions
+
+sam = rbinom(20,32, prob = .05)
+uhhh <- myboot(sam, iter=10000,fun="mean", alpha = .2)
+uhhh <- myboot(sam, iter=10000,fun="var", alpha = .2)
+```
+
+
+## Task 7
+
+```{r}
+set.seed(68)
+sam=rnorm(20,mean=10,sd=4)
+
+myboot(sam,iter=10000, fun="sd",alpha=.05)
+
+myboot(sam,iter=10000, fun="median",alpha=.05)
+
+
+myboot(sam,iter=10000,fun="mean",alpha=.05)
+```
+
+## Task 8
+
+```{r}
+data = MATH4753BERN0021::dog
+MATH4753BERN0021::myboot(x = data$DISTANCE )
+```
+

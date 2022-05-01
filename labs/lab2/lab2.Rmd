@@ -49,7 +49,7 @@ Chebyshev’s Theorem says 1-1/2^2, or 75% if the data will fall between. The ac
 length(mpg[abs(z)<2])/length(mpg)
 ```
 
-which falls above the "at least" mark set by the theorem, so the theorem agrees with the actual answer.
+which falls above te "at least" mark set by the theorem, so the theorem agrees with the actual answer.
 
 The empirical rule says that around 95% of the data should fall between 2 standard deviations of the mean. The real answer is
 ```{r}

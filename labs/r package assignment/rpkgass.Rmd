@@ -1,0 +1,21 @@
+---
+title: "R Package Assignment"
+author: "Marcos Bernier"
+date: "5/1/2022"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+ 
+```{r}
+library(MATH4753BERN0021)
+
+devtools::check()
+```
+

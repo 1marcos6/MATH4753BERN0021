@@ -1,0 +1,398 @@
+---
+title: "Ass3"
+author: "Marcos Bernier"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## I did 15/16 :(
+
+# Question 1
+
+## A
+
+The time is 2 minutes = 120 seconds. The rate required by the function pexp must be under 1 so instwad of 95, I pass 1/95 to the function
+
+```{r}
+1-pexp(120,1/95)
+```
+
+## B
+
+```{r}
+phish <- read.csv("PHISHING.CSV")
+(mean(phish$INTTIME)-95)/95
+(var(phish$INTTIME)-9025)/9025
+
+
+```
+
+
+The mean and variation indicate that it follows an exponential distribution with 95.
+
+# Question 2
+
+## A
+
+```{r}
+a = 3
+b = 0.07
+
+3*.07
+3*(.07*.07)
+```
+
+## B
+
+Max flood is .6 M cft/s but within 3sd of the mean is .57 mil. .6 is an outlier. Not to be expected because it is an outlier. 
+
+# Question 3
+
+## A
+
+$m_a = 2*2 = 4$
+$m_b = 1*4 = 4$
+
+## B
+
+$v_a = 2*2^2 = 8$
+$v_b = 1*4^2 = 16$
+
+## C
+
+```{r}
+pgamma(1,2,1/2)
+pgamma(1,1,1/4)
+```
+
+A probability is 9 ~ percent. While B is 22 ~ percent. B is much more likely to cause a reaction in <1 min.
+
+
+# Question 4
+
+## A
+
+Weibull. 
+
+```{r}
+pweibull(2,2,2)
+```
+
+## B
+
+$2*.88623 = 1.77246$
+$4(1-0.88623^2) = .8583$
+
+The mean is 1.77~ and the SD is .9265~.
+
+
+
+## C
+
+This can be solved by running
+
+```{r}
+pweibull(3.62546,2,2) - pweibull(-0.08054,2,2)
+```
+
+The probability is .962
+
+## D
+
+Use R again for P(Y>6)
+
+```{r}
+1-pweibull(6,2,2)
+```
+
+Very unlikely.
+
+# Question 5
+
+## A
+
+$a=2,b=11$ so $m=2/11 = .18182$ and $v=18/{{11^2(11)}} = 0.01240$
+
+## B
+
+To find the probability 40% of hardware repair will be laser printer, you can use pbeta. P(y>=.4)
+```{r}
+1-pbeta(.4,2,9)
+```
+
+## C
+
+Again, pbeta can be used to find this probability. P(<=.1)
+
+```{r}
+pbeta(.1,2,9)
+```
+
+
+# Question 6
+
+## A
+
+The values are respectively 2, and 16
+
+## B
+
+$4*.88623 = 3.54492$
+$16(1-.88623^2)=3.4335$
+
+## C
+
+To calculate the probability concerning 6 years failure free use pweibull once more
+
+```{r}
+1-pweibull(6,2,4)
+```
+
+# Question 7
+
+## A
+
+```{r}
+row = c()
+for(i in 1:36)
+{
+  row = c(row,1/36)
+}
+row
+```
+
+## B
+
+$P(X=1) = p_1(1) = 1/36 * 6 = 1/6$
+$p_1(X) = 1/6$
+
+$P(Y=1) = p_2(1) = 1/36 * 6 = 1/6$
+$p_2(Y) = 1/6$
+
+## C
+
+$p(x,y)/p_2(y)$
+
+$p(1,1) = p(1,1)/p_2(1) = 1/6$
+
+
+$p(x,y)/p_1(x)$
+
+$p(1,1) = p(1,1)/p_1(1) = 1/6$
+
+The conditional probabilities are the same as the joint probability table.
+
+## D
+The occurence of one event does not impact the other event occuring. This implies that they are independent.
+
+# Question 8
+
+## A
+
+```{r}
+t1<- c(1/7,2/7,1/7)
+t2<- c(0,0,2/7)
+t3<- c(0,0, 1/7)
+t1
+t2
+t3
+```
+
+## B
+
+
+```{r}
+t1<- c(1/7,2/7,1/7)
+t2<- c(0,0,2/7)
+t3<- c(0,0, 1/7)
+t1
+t2
+t3
+c(t1[1]+t2[1]+t3[1],t1[2]+t2[2]+t3[2],t1[3]+t2[3]+t3[3])
+```
+
+## B
+
+```{r}
+t1<- c(1/7,2/7,1/7)
+t2<- c(0,0,2/7)
+t3<- c(0,0, 1/7)
+t1 = c(t1,sum(t1[1],t1[2],t1[3]))
+t2 = c(t2,sum(t2[1],t2[2],t2[3]))
+t3 = c(t3,sum(t3[1],t3[2],t3[3]))
+
+t1
+t2
+t3
+
+
+```
+
+
+## C
+
+```{r}
+c(1,1,1/4)
+c(0,0,1/2)
+c(0,0,1/4)
+```
+
+
+# Question 9
+
+## A
+
+$f_2(y)= \int_y^{2y}f(x,y)dx $
+$=== \frac{e^{-y/10}}{10}$
+
+## B
+
+The expected value of a CRV is beta. Beta is 10 so the EV is 10.
+
+# Question 10
+
+## A
+
+${cxe^{-x^2}}/-2x$ from 0 to inf $=1$
+
+so 
+
+$0 - {ce^{-0^2}}/{-2} = 1$
+$c/2$ = 1
+
+$c=2$
+
+
+
+## B
+
+$f_1(x)=2xe^{-x^2}$
+
+integrate
+
+$2xe^{-x^2}/{-2x}$ from o to inf = 1
+
+$0 - 2e^{-0^2}/{-2}$ = 1
+
+
+
+## C
+
+$f_1(x)=1$
+
+$f_2(y|x) = 2e^{-x^2}$
+
+Shown :)
+
+# Question 11
+
+The covariance of X,Y = E(XY) - E(X)E(Y)
+E(XY) = 0, and respective expected vaues also = 0. So COV(X,Y) =0. Y is depdndent on X. If x = 2, Y can only be =X or =-X.
+
+
+# Question 13
+
+## A
+$P(Y<=1) = P(Z<-2.9668)$
+
+```{r}
+pnorm(-2.9668)
+```
+
+## B
+
+$P(Y>=11) = P(Z>1.1410)$
+
+```{r}
+1-pnorm(1.1410)
+```
+
+## C
+
+```{r}
+pbinom(1,20,.4)
+1-pbinom(10,20,.4)
+```
+
+It provides a good approx.
+
+# Question 14
+
+## A
+
+```{r}
+library(readxl)
+dird = "/Users/marcosbernier/Dev/stats/MATH4753BERN0021/assignments/ass3"
+
+myread = function(xls){
+  require(readxl)
+read_xls(paste0(dird, xls))
+}
+leadcop = myread("/LEADCOPP.xls")
+t.test(leadcop$LEAD,conf.level = 0.99)
+```
+
+## B
+
+```{r}
+t.test(leadcop$COPPER,conf.level = 0.99)
+
+```
+
+
+## C
+
+99% of lead falls between -1.1478 and 6.919. 99% of copper falls betweem .1518 and .6647.
+
+## D
+
+99% of intervals contain the values.
+
+# Question 15
+
+```{r}
+library(readxl)
+dird = "/Users/marcosbernier/Dev/stats/MATH4753BERN0021/assignments/ass3"
+
+myread = function(xls){
+  require(readxl)
+read_xls(paste0(dird, xls))
+}
+solrad = myread("/SOLARAD.xls")
+```
+
+```{r}
+with(solrad, t.test(STJOS, IOWA, paired=TRUE, conf.level = 0.95))
+```
+
+Between 156.8193 and 239.1807.
+
+# Question 16
+
+## A
+
+```{r}
+diazinon = myread("/DIAZINON.xls")
+with( diazinon, t.test(DAY, NIGHT, paired =TRUE, conf.level = .90))
+```
+
+90% is between -58.8992 and -18.9190
+
+## B
+
+The population has a normal distribution.
+
+## C
+
+The diazon levels do differ between day and night.
+
+
+
+
