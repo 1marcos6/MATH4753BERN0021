@@ -13,9 +13,22 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
  
+myclt()
+myddt()
+mysample()
+pareto()
+
+
 ```{r}
 library(MATH4753BERN0021)
+myclt(2,3)
+myddt(read.csv("/Users/marcosbernier/Dev/stats/MATH4753BERN0021/projects/project1/DDT.csv"),"CCATFISH")
+mysample(2)
+pareto(c(1,2,3))
+```
+```{r}
+MATH4753BERN0021::fire
 
-devtools::check()
+
 ```
 

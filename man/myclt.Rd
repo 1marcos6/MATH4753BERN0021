@@ -2,16 +2,22 @@
 % Please edit documentation in R/myclt.R
 \name{myclt}
 \alias{myclt}
-\title{Title}
+\title{Central Limit Theorem Function}
 \usage{
 myclt(n, iter, a = 0, b = 5)
 }
 \arguments{
-\item{b}{}
+\item{n}{how many numbers}
+
+\item{iter}{how many times to iterate}
+
+\item{a}{Default a value}
+
+\item{b}{Default b value}
 }
 \value{
-
+A bargraph!
 }
 \description{
-Title
+Central Limit Theorem Function
 }

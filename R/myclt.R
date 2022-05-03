@@ -1,11 +1,11 @@
-#' Title
+#' Central Limit Theorem Function
 #'
-#' @param n
-#' @param iter
-#' @param a
-#' @param b
+#' @param n how many numbers
+#' @param iter how many times to iterate
+#' @param a Default a value
+#' @param b Default b value
 #'
-#' @return
+#' @return A bargraph!
 #' @export
 #'
 #' @examples

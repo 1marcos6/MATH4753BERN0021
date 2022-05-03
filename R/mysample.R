@@ -1,3 +1,13 @@
+#' Sample Generator
+#'
+#' @param n the population size
+#' @param iter the amount of samples to make
+#' @param time the amount of time to wait before releasing a new sample
+#'
+#' @return There is no return but through plot output.
+#' @export
+#'
+#' @examples
 mysample=function(n, iter=10,time=0.5){
   for( i in 1:iter){
     #make a sample
@@ -14,4 +24,3 @@ mysample=function(n, iter=10,time=0.5){
     Sys.sleep(time)
   }
 }
-
